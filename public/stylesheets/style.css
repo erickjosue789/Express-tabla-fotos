@@ -1,0 +1,20 @@
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+.sidebar {
+  background-color: #f8f9fa;
+  padding: 15px;
+  height: 100%;
+}
+
+a {
+  color: #00B7FF;
+}
