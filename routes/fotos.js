@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-const Sequelize = require('sequelize');
+const {Sequelize, Op} = require('sequelize');
 const Foto = require('../models').foto;
 const Etiqueta = require('../models').etiqueta;
 
@@ -39,6 +39,79 @@ router.get('/findAll/view', function (req, res, next) {
         .catch(error => res.status(400).send(error))
 });
 
+
+
+
+// Where - ROUTES
+router.get('/findAllByRate/json', function (req, res, next) {
+    let lower = parseFloat(req.query.lower);
+    let higher = parseFloat(req.query.higher);
+
+    Foto.findAll({
+        attributes: { exclude: ["updatedAt"] },
+        include: [{
+            model: Etiqueta,
+            attributes: ['texto'],
+            through: { attributes: [] }
+        }],
+        where: {
+            calificacion: { [Op.between]: [lower, higher] }
+        }
+    })
+        .then(fotos => {
+            res.json(fotos);
+        })
+        .catch(error =>
+            res.status(400).send(error))
+});
+
+
+router.get('/findAllById/:id/json', function (req, res, next) {
+    let id = parseInt(req.params.id);
+    Foto.findAll({
+        attributes: { exclude: ["updatedAt"] },
+        include: [{
+            model: Etiqueta,
+            attributes: ['texto'],
+            through: { attributes: [] }
+        }],
+        where: {
+            [Op.and]: [{ id: id }]
+
+        }
+    })
+        .then(fotos => {
+            res.json(fotos);
+        })
+        .catch(error =>
+            res.status(400).send(error))
+});
+
+
+router.get('/view/:id', function (req, res, next) {
+    let id = parseInt(req.params.id);
+
+    Foto.findAll({
+        attributes: { exclude: ["updatedAt"] },
+        include: [{
+            model: Etiqueta,
+            attributes: ['texto'],
+            through: { attributes: [] }
+        }],
+        where: {
+            [Op.and]: [
+                { 'id': id }
+            ]
+        }
+    })
+    .then(foto => {
+        res.render('foto_id', { title: 'Detalles de la Foto', arrFoto: foto });
+    })
+    .catch(error => {
+        console.error('Error fetching data:', error);
+        res.status(400).send(error);
+    });
+});
 
 
 module.exports = router;

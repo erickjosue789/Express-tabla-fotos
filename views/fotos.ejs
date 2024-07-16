@@ -28,6 +28,7 @@
                     <th>Ruta</th>
                     <th>Etiquetas</th>
                     <th>Update</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -54,9 +55,11 @@
                           <span class="text-muted">Sin etiquetas</span>
                         <% } %>
                       </td>
-                      
                       <td>
                         <%= foto.createdAt.toLocaleDateString('en-US') %>
+                      </td>
+                      <td>
+                        <a href="/fotos/view/<%= foto.id %>">Ver info</a>
                       </td>
                     </tr>
                     <% }); %>
